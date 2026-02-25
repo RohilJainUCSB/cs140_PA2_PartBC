@@ -404,12 +404,12 @@ void run_all_tests(void) {
   mu_run_test(itmv_test_8a);
   mu_run_test(itmv_test_8b);
 
-  // mu_run_test(itmv_test9);
-  // mu_run_test(itmv_test10);
-  // mu_run_test(itmv_test11);
-  // mu_run_test(itmv_test12);
-  // mu_run_test(itmv_test13);
-  // mu_run_test(itmv_test14);
+  mu_run_test(itmv_test9);
+  mu_run_test(itmv_test10);
+  mu_run_test(itmv_test11);
+  mu_run_test(itmv_test12);
+  mu_run_test(itmv_test13);
+  mu_run_test(itmv_test14);
 }
 
 /*-------------------------------------------------------------------

@@ -19,9 +19,26 @@
  */
 
 int cs140barrier_init(cs140barrier *bstate, int total_nthread) {
-  /*Your solution*/
+    //Handle error cases where there is no barrier value or no threads or negative threads
+    if(bstate == NULL || total_nthread <= 0)
+    {
+        return -1;
+    }
 
-  return 0;
+    if(pthread_mutex_init(&bstate->barrier_mutex, NULL) != 0) //Initialize the mute
+    {
+        return -1;
+    }
+    if(pthread_cond_init(&bstate->barrier_cond, NULL) != 0) //Initialize the condition var
+    {
+        return -1;
+    }
+
+    bstate->total_nthread = total_nthread;
+    bstate->arrive_nthread = 0; //No threads have arrived yet
+    bstate->odd_round = False;   //Start with False (even round)
+
+    return 0;
 }
 
 /******************************************************
@@ -43,9 +60,35 @@ int cs140barrier_init(cs140barrier *bstate, int total_nthread) {
  */
 
 int cs140barrier_wait(cs140barrier *bstate) {
-  /*Your solution*/
+    int returnValue = 0;
 
-  return 0;
+    pthread_mutex_lock(&bstate->barrier_mutex);
+
+    boolean my_round = bstate->odd_round;
+    bstate->arrive_nthread++; //Increase the arrived threads
+
+    //If this is the last thread to arrive
+    if(bstate->arrive_nthread == bstate->total_nthread)
+    {
+        //Reset the arrived threads
+        bstate->arrive_nthread = 0;
+        //Flip the sense attribute and broadcast the global sense
+        bstate->odd_round = (bstate->odd_round == False) ? True : False;
+        pthread_cond_broadcast(&bstate->barrier_cond);
+        returnValue = 1; //Return value for the last thread is 1
+    }
+    else
+    {
+        //Wait until odd_round changes 
+        while(bstate->odd_round == my_round)
+        {
+            pthread_cond_wait(&bstate->barrier_cond, &bstate->barrier_mutex);
+        }
+        returnValue = 0;
+    }
+
+    pthread_mutex_unlock(&bstate->barrier_mutex);
+    return returnValue;
 }
 
 /******************************************************
@@ -58,7 +101,14 @@ int cs140barrier_wait(cs140barrier *bstate) {
  */
 
 int cs140barrier_destroy(cs140barrier *bstate) {
-  /*Your solution*/
+    if(pthread_mutex_destroy(&bstate->barrier_mutex) != 0)
+    {
+        return -1;
+    }
+    if(pthread_cond_destroy(&bstate->barrier_cond) != 0)
+    {
+        return -1;
+    }
 
-  return 0;
+    return 0;
 }

@@ -78,8 +78,65 @@ void mv_compute(int i) {
  * Global out vars:
  *            double vector_y[]:  vector y
  */
+int global_stop = 0;
 void work_block(long my_rank) {
-  /*Your solution*/
+  int blocksize = (matrix_dim + thread_count - 1) / thread_count; //Block size is the ceil(m_dim/t_count)
+
+  int start = my_rank * blocksize;
+  int end = start + blocksize;
+  if(end > matrix_dim)   
+  {
+    end = matrix_dim;
+  }
+
+  //Run the Jacobi with the number of iterations it needs
+  for(int i = 0; i < no_iterations; i++)
+  {
+    //Compute y = d + A*x for my rows
+    for(int j = start; j < end; j++)
+    {
+      mv_compute(j);
+    }
+    //Set a barrier so all threads compute y
+    pthread_barrier_wait(&mybarrier);
+
+    //Designate thread 0 to check for convergence
+    if(my_rank == 0)
+    {
+      int stop = 1; //Flag to check if a stop is needed
+      for(int j = 0; j < matrix_dim; j++)
+      {
+        //If any element is above the error threshold, we keep going
+        if(fabs(vector_x[j] - vector_y[j]) > ERROR_THRESHOLD) 
+        {
+          stop = 0; //Set flag to keep going
+          break;
+        }
+      }
+
+      //Update x = y for my rows if not stopped
+      if(stop)
+      {
+        global_stop = 1;
+      }
+      else
+      {
+        for(int j = 0; j < matrix_dim; j++)
+        {
+          vector_x[j] = vector_y[j];
+        }
+        global_stop = 0;
+      }
+    }
+    //Sync to ensure convergence is set
+    pthread_barrier_wait(&mybarrier);
+
+    //If error is low, then we have converged and can stop running
+    if(global_stop)
+    {
+      break;
+    }
+  }
 }
 
 /*---------------------------------------------------------------------
@@ -107,7 +164,67 @@ void work_block(long my_rank) {
  *            double vector_y[]:  vector y
  */
 void work_blockcyclic(long my_rank) {
-  /*Your solution*/
+  for(int i = 0; i < no_iterations; i++)
+  {
+    //Compute y = d + A*x for my block-cyclic rows
+    for(int j = my_rank; ; j += thread_count)
+    {
+      int row_start = j * cyclic_blocksize;
+      //If we have exceeded valid rows, we need to break out of the loop
+      if(row_start >= matrix_dim)
+      {
+        break;
+      }
+      //The row end should be clamped to at most the dimensions
+      int row_end = row_start + cyclic_blocksize;
+      if(row_end > matrix_dim)
+      {
+        row_end = matrix_dim;
+      }
+      //Do the computations
+      for(int k = row_start; k < row_end; k++) 
+      {
+        mv_compute(k);
+      }
+    }
+    //Sync thread computations for the iteration
+    pthread_barrier_wait(&mybarrier);
+
+    //Designate thread 0 to check convergence
+    if(my_rank == 0)
+    {
+      int stop = 1;
+      for(int j = 0; j < matrix_dim; j++)
+      {
+        //If any vector item is not in threshold, we need another iteration
+        if(fabs(vector_x[j] - vector_y[j]) > ERROR_THRESHOLD)
+        {
+          stop = 0;
+          break;
+        }
+      }
+      //If not stopping, update all the values
+      if(stop)
+      {
+        global_stop = 1;
+      }
+      else
+      {
+        for(int j = 0; j < matrix_dim; j++)
+        {
+          vector_x[j] = vector_y[j];
+        }
+        global_stop = 0;
+      }
+    }
+    //Sync all threads for iteration continuance
+    pthread_barrier_wait(&mybarrier);
+
+    if(global_stop)
+    {
+      break;
+    }
+  }
 }
 
 /*-------------------------------------------------------------------
