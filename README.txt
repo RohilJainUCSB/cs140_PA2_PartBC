@@ -131,6 +131,68 @@ Please indicate if your evaluation is done on CSIL and if yes, list the uptime i
 This was done on a CSIL machine:
 CSIL Machine: csilvm-13 (00:02:22 up 19:01, load avg: 0.47, 0.32, 0.36)
 
+Literal provided output:
+> ./itmv_mult_test_pth 1
+Test 1: Latency = 0.000198 sec with 1 threads. Matrix dimension 16 
+Test 2: Latency = 0.000074 sec with 1 threads. Matrix dimension 17 
+Test 3: Latency = 0.000273 sec with 1 threads. Matrix dimension 16 
+Test 4: Latency = 0.000090 sec with 1 threads. Matrix dimension 17 
+Test 4c: Latency = 0.000061 sec with 1 threads. Matrix dimension 16 
+Test 5: Latency = 0.000069 sec with 1 threads. Matrix dimension 17 
+Test 6: Latency = 0.000101 sec with 1 threads. Matrix dimension 16 
+Test 7: Latency = 0.000072 sec with 1 threads. Matrix dimension 17 
+Test 7c: Latency = 0.000059 sec with 1 threads. Matrix dimension 16 
+Test 8: Latency = 0.000057 sec with 1 threads. Matrix dimension 17 
+Test 8a: n=0.5K t=8K blockmapping: Latency = 0.911887 sec with 1 threads. Matrix dimension 512 
+Test 8b: n=0.5K t=8K blockmapping: Latency = 0.001381 sec with 1 threads. Matrix dimension 512 
+Test 9: n=4K t=1K blockmapping: Latency = 24.529095 sec with 1 threads. Matrix dimension 4096 
+Test 10: n=4K t=1K block cylic (r=1): Latency = 24.897233 sec with 1 threads. Matrix dimension 4096 
+Test 11: n=4K t=1K block cyclic (r=16): Latency = 24.704408 sec with 1 threads. Matrix dimension 4096 
+Test 12: n=4K t=1K upper block mapping: Latency = 0.109864 sec with 1 threads. Matrix dimension 4096 
+Test 13: n=4K t=1K upper block cylic (r=1): Latency = 0.109171 sec with 1 threads. Matrix dimension 4096 
+Test 14: n=4K t=1K upper block cyclic(r=16): Latency = 0.109401 sec with 1 threads. Matrix dimension 4096 
+Summary: Failed 0 out of 18 tests
+> ./itmv_mult_test_pth 2
+Test 1: Latency = 0.000261 sec with 2 threads. Matrix dimension 16 
+Test 2: Latency = 0.000239 sec with 2 threads. Matrix dimension 17 
+Test 3: Latency = 0.000172 sec with 2 threads. Matrix dimension 16 
+Test 4: Latency = 0.000210 sec with 2 threads. Matrix dimension 17 
+Test 4c: Latency = 0.000143 sec with 2 threads. Matrix dimension 16 
+Test 5: Latency = 0.000163 sec with 2 threads. Matrix dimension 17 
+Test 6: Latency = 0.000131 sec with 2 threads. Matrix dimension 16 
+Test 7: Latency = 0.000174 sec with 2 threads. Matrix dimension 17 
+Test 7c: Latency = 0.000158 sec with 2 threads. Matrix dimension 16 
+Test 8: Latency = 0.000167 sec with 2 threads. Matrix dimension 17 
+Test 8a: n=0.5K t=8K blockmapping: Latency = 0.619414 sec with 2 threads. Matrix dimension 512 
+Test 8b: n=0.5K t=8K blockmapping: Latency = 0.001382 sec with 2 threads. Matrix dimension 512 
+Test 9: n=4K t=1K blockmapping: Latency = 13.177164 sec with 2 threads. Matrix dimension 4096 
+Test 10: n=4K t=1K block cylic (r=1): Latency = 13.111384 sec with 2 threads. Matrix dimension 4096 
+Test 11: n=4K t=1K block cyclic (r=16): Latency = 12.564769 sec with 2 threads. Matrix dimension 4096 
+Test 12: n=4K t=1K upper block mapping: Latency = 0.078270 sec with 2 threads. Matrix dimension 4096 
+Test 13: n=4K t=1K upper block cylic (r=1): Latency = 0.065299 sec with 2 threads. Matrix dimension 4096 
+Test 14: n=4K t=1K upper block cyclic(r=16): Latency = 0.063525 sec with 2 threads. Matrix dimension 4096 
+Summary: Failed 0 out of 18 tests
+> ./itmv_mult_test_pth 4
+Test 1: Latency = 0.000265 sec with 4 threads. Matrix dimension 16 
+Test 2: Latency = 0.000205 sec with 4 threads. Matrix dimension 17 
+Test 3: Latency = 0.000144 sec with 4 threads. Matrix dimension 16 
+Test 4: Latency = 0.000199 sec with 4 threads. Matrix dimension 17 
+Test 4c: Latency = 0.000240 sec with 4 threads. Matrix dimension 16 
+Test 5: Latency = 0.000187 sec with 4 threads. Matrix dimension 17 
+Test 6: Latency = 0.000226 sec with 4 threads. Matrix dimension 16 
+Test 7: Latency = 0.000234 sec with 4 threads. Matrix dimension 17 
+Test 7c: Latency = 0.000139 sec with 4 threads. Matrix dimension 16 
+Test 8: Latency = 0.000194 sec with 4 threads. Matrix dimension 17 
+Test 8a: n=0.5K t=8K blockmapping: Latency = 0.432945 sec with 4 threads. Matrix dimension 512 
+Test 8b: n=0.5K t=8K blockmapping: Latency = 0.001053 sec with 4 threads. Matrix dimension 512 
+Test 9: n=4K t=1K blockmapping: Latency = 6.439923 sec with 4 threads. Matrix dimension 4096 
+Test 10: n=4K t=1K block cylic (r=1): Latency = 6.842758 sec with 4 threads. Matrix dimension 4096 
+Test 11: n=4K t=1K block cyclic (r=16): Latency = 6.555110 sec with 4 threads. Matrix dimension 4096 
+Test 12: n=4K t=1K upper block mapping: Latency = 0.041894 sec with 4 threads. Matrix dimension 4096 
+Test 13: n=4K t=1K upper block cylic (r=1): Latency = 0.029198 sec with 4 threads. Matrix dimension 4096 
+Test 14: n=4K t=1K upper block cyclic(r=16): Latency = 0.027321 sec with 4 threads. Matrix dimension 4096 
+Summary: Failed 0 out of 18 tests
+
 -----------------------------------------------------------------
 Part C
 
